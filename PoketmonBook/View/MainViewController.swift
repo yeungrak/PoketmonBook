@@ -33,7 +33,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         configureUi()
         bind()
-        viewModel.fetchPokemonList(limit: 20, offset: 0)
+        viewModel.loadMorePoketmons()
     }
     
     //MARK: UI
@@ -53,7 +53,7 @@ class MainViewController: UIViewController {
         }
     }
     private func bind() {
-        viewModel.poketmonSubject
+        viewModel.poketmonList
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] list in
                 self?.poketmonList = list
@@ -110,6 +110,15 @@ extension MainViewController: UICollectionViewDelegate {
                 navigationController?.pushViewController(detailVC, animated: true)
             }
         }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+
+        if offsetY > contentHeight - frameHeight - 100 {
+            viewModel.loadMorePoketmons()
+        }
+    }
 }
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
