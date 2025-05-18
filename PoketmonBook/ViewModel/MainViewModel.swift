@@ -10,19 +10,19 @@ import RxSwift
 
 class MainViewModel {
     private let disposeBag = DisposeBag()
-    let pokemonSubject = BehaviorSubject(value: [PokemonListResult]())
+    let poketmonSubject = BehaviorSubject(value: [PoketmonListResult]())
     
     func fetchPokemonList(limit: Int, offset: Int) {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=\(limit)&offset=\(offset)") else {
-            pokemonSubject.onError(NetworkError.invalidUrl)
+            poketmonSubject.onError(NetworkError.invalidUrl)
             return
         }
         
         NetworkManager.shared.fetch(url: url)
-            .subscribe(onSuccess: {[weak self] (pokemonListResponse: PokemonListResponse) in
-                self?.pokemonSubject.onNext(pokemonListResponse.results)
+            .subscribe(onSuccess: {[weak self] (pokemonListResponse: PoketmonListResponse) in
+                self?.poketmonSubject.onNext(pokemonListResponse.results)
             }, onFailure: { [weak self] error in
-                self?.pokemonSubject.onError(error)
+                self?.poketmonSubject.onError(error)
             }).disposed(by: disposeBag)
     }
 }

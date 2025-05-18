@@ -7,19 +7,19 @@
 
 import Foundation
 
-struct PokemonListResponse: Codable {
+struct PoketmonListResponse: Codable {
     let count: Int
     let next: String?
     let previous: String?
-    let results: [PokemonListResult]
+    let results: [PoketmonListResult]
 }
 
-struct PokemonListResult: Codable {
+struct PoketmonListResult: Codable {
     let name: String?
     let url: String?
 }
 
-extension PokemonListResult {
+extension PoketmonListResult {
     var imageURL: URL? {
         guard let url = self.url else { return nil }
         let parts = url.split(separator: "/")

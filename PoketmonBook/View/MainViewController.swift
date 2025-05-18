@@ -12,7 +12,7 @@ import RxSwift
 class MainViewController: UIViewController {
     private let viewModel = MainViewModel()
     private let disposeBag = DisposeBag()
-    private var poketmonList = [PokemonListResult]()
+    private var poketmonList = [PoketmonListResult]()
     
     private let ballImage: UIImageView = {
         let image = UIImageView()
@@ -53,7 +53,7 @@ class MainViewController: UIViewController {
         }
     }
     private func bind() {
-        viewModel.pokemonSubject
+        viewModel.poketmonSubject
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] list in
                 self?.poketmonList = list
@@ -97,7 +97,19 @@ extension UIColor {
 // MARK: UICollcetionView Data Source
 
 extension MainViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            let selected = poketmonList[indexPath.item]
+
+            // url에서 포켓몬 id 추출
+            if let urlString = selected.url,
+               let idString = urlString.split(separator: "/").last,
+               let id = Int(idString) {
+                
+                let detailVC = DetailViewController()
+                detailVC.setPokemonId(id) // ID 전달
+                navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }
 }
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
