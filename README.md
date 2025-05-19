@@ -6,10 +6,10 @@
 ## 🖼️ 앱 미리보기
 
 ### 🔍 포켓몬 리스트
-![포켓몬 리스트](https://raw.githubusercontent.com/yeungrak/repo/dev/Assets/pokemon_list.png)
+<img src="PoketmonBook/Assets.xcassets/pokemon_list.imageset/pokemon_list.png" width="350" />
 
 ### 📄 포켓몬 상세 정보
-![포켓몬 상세](https://raw.githubusercontent.com/yeungrak/repo/dev/Assets/pokemon_detail.png)
+<img src="PoketmonBook/Assets.xcassets/pokemon_detail.imageset/pokemon_detail.png" width="350" />
 
 ## 📱 주요 기능
 
