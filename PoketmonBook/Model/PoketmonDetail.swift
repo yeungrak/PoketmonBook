@@ -7,29 +7,20 @@
 
 import Foundation
 
-struct PokemonDetail: Codable {
-    let id: Int?
-    let name: String?
-    let height: Int?
-    let weight: Int?
-    let sprites: Sprite?
-    let types: [PokemonTypeEntry]
+struct PoketmonDetail: Codable {
+    let id: Int?          // No
+    let name: String?     // 이름
+    let height: Int?    // 키
+    let weight: Int?      // 몸무게
+    let types: [PoketmonTypeEntry] // 타입 배열
 }
 
-struct Sprite: Codable {
-    let frontDefault: String?
-
-    enum CodingKeys: String, CodingKey {
-        case frontDefault = "front_default"
-    }
-}
-
-struct PokemonTypeEntry: Codable {
+struct PoketmonTypeEntry: Codable {
     let slot: Int?
-    let type: PokemonType
+    let type: PoketmonType
 }
 
-struct PokemonType: Codable {
-    let name: String?
-    let url: String?
+struct PoketmonType: Codable {
+    let name: String? // 포켓몬 타입이름
 }
+

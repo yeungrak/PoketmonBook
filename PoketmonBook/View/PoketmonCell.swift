@@ -8,6 +8,7 @@
 import UIKit
 
 class PoketmonCell: UICollectionViewCell {
+    //Identifier
     static let id = "PoketmonCell"
     
     let imageView: UIImageView = {
@@ -22,6 +23,7 @@ class PoketmonCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
+        //전체 셀 영역에 이미지가 차게함
         imageView.frame = contentView.bounds
     }
     
@@ -31,6 +33,7 @@ class PoketmonCell: UICollectionViewCell {
     override func prepareForReuse() {
         imageView.image = nil
     }
+    //킹피셔로 교체가능
     func configure(with url: URL) {
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url),
