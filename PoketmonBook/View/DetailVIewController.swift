@@ -10,11 +10,10 @@ import SnapKit
 import RxSwift
 
 class DetailViewController: UIViewController {
-
+    
     private let viewModel = DetailViewModel()
     private let disposeBag = DisposeBag()
     
-    // MARK: UI
     private let nameLabel = UILabel()
     private let typeLabel = UILabel()
     private let heightLabel = UILabel()
@@ -32,23 +31,28 @@ class DetailViewController: UIViewController {
         view.clipsToBounds = true
         return view
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bind()
         viewModel.fetchPoketmonDetail()
     }
-
-    func setPokemonId(_ id: Int) {
+    //포켓몬의 id 정보를 받아 올 수 있는 함수 detailModel 받아오기 떄문에
+    // DetailViewController에서 받아옴.
+    func setPoketmonId(_ id: Int) {
         viewModel.poketmonId = id
     }
-
+    //데이터바인딩을 위한 함수
     private func bind() {
         viewModel.poketmonSubject
+        //nil이 아닌 값만 방출
             .compactMap { $0 }
+        //ui변경은 항상 메인스레드에서 해야함으로 보장해줌
             .observe(on: MainScheduler.instance)
+        //구독 시작하고 새로운 데이터가 들어올때마다 처리
             .subscribe(onNext: { [weak self] (detail: PoketmonDetail) in
+                //번역용 프로퍼티
                 let koreanName = PoketmonTranslator.getKoreanName(for: detail.name ?? "")
                 let typeNames = detail.types.map { $0.type.name ?? "" }
                 let translated = typeNames.compactMap { PoketmonTypeName(rawValue: $0)?.displayName }
@@ -56,21 +60,27 @@ class DetailViewController: UIViewController {
                 self?.typeLabel.text = "타입: \(translated.joined(separator: " / "))"
                 self?.heightLabel.text = "키: \((Double(detail.height ?? 0) / 10)) m"
                 self?.weightLabel.text = "몸무게: \((Double(detail.weight ?? 0) / 10)) kg"
+                //비동기형식의 이미지처리
+                //detail api의 id부분을 가져와
+                //이미지 UrL생성 백그라운드에서 이미지를 다운하고
+                //이미지 다운로드 성공시에 메인스레드 이미지뷰에 세팅함
                 if let id = detail.id,
                    let imageURL = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png") {
-                    DispatchQueue.global().async {
-                        if let data = try? Data(contentsOf: imageURL),
-                           let image = UIImage(data: data) {
-                            DispatchQueue.main.async {
-                                self?.imageView.image = image
-                            }
+                    URLSession.shared.dataTask(with: imageURL) { [weak self] data, response, error in
+                        guard let data = data, error == nil,
+                              let image = UIImage(data: data) else {
+                            return
                         }
-                    }
+                        
+                        DispatchQueue.main.async {
+                            self?.imageView.image = image
+                        }
+                    }.resume()
                 }
-            })
-            .disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
     }
-
+    
+    // MARK: - UI
     private func configureUI() {
         view.backgroundColor = .mainRed
         view.addSubview(backgroundView)

@@ -11,8 +11,10 @@ import RxSwift
 class DetailViewModel {
     
     private let disposeBag = DisposeBag()
+    //UI와 데이터 바인딩을 하기 위해 사용함
     let poketmonSubject = BehaviorSubject<PoketmonDetail?>(value: nil)
     var poketmonId:Int = 0
+    //API 요청을 수행하는 함수
     func fetchPoketmonDetail () {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(poketmonId)/") else {
             poketmonSubject.onError(NetworkError.invalidUrl)

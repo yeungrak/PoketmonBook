@@ -21,6 +21,6 @@ struct PoketmonTypeEntry: Codable {
 }
 
 struct PoketmonType: Codable {
-    let name: String?
+    let name: String? // 포켓몬 타입이름
 }
 

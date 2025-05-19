@@ -24,7 +24,7 @@ enum PoketmonTypeName: String, CaseIterable, Codable {
     case dark
     case steel
     case fairy
-
+    
     var displayName: String {
         switch self {
         case .normal: return "노말"
