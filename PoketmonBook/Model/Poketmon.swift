@@ -24,7 +24,7 @@ extension PoketmonListResult {
         guard let url = self.url else { return nil }
         let parts = url.split(separator: "/")
         if let idString = parts.last, let id = Int(idString) {
-            return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/\(id).png")
+            return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
         }
         return nil
     }
